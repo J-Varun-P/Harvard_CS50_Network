@@ -6,7 +6,39 @@
       <h4>New Post</h4>
       <form class="" action="">
         <textarea name="name" rows="6"></textarea>
-        <button type="submit">Submit</button>
+        <button type="submit">Post</button>
       </form>
     </div>
+    <div class="displayposts">
+      {% for post in postings %}
+        <div class="displaysinglepost">
+          <h5>{{post.name.username}}</h5>
+          <p>{{post.content}}</p>
+          <p>{{ post.timestamp }}</p>
+          <div class="like">
+            <i class="far fa-thumbs-up" style="font-size: 21px;"></i>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.fa-thumbs-up').forEach(likedicon =>{
+          likedicon.onclick = ()=> {
+            if(likedicon.style.color == 'blue'){
+              console.log("i'm in blue");
+              likedicon.style.color = '#212529';
+              likedicon.classList.remove('fas');
+              likedicon.classList.add('far');
+            }
+            else{
+              console.log("i'm in none");
+              likedicon.style.color = 'blue';
+              likedicon.classList.remove('far');
+              likedicon.classList.add('fas');
+            }
+          }
+        })
+      });
+    </script>
 {% endblock %}

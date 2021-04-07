@@ -23,6 +23,7 @@ h4{
   width: 100%;
   margin: 5px;
   padding: 5px;
+  border-color: #bbb;
 }
 
 .NewPost button{
@@ -31,10 +32,25 @@ h4{
   background-color: #007bff;
   border-color: #007bff;
   border-radius: 5px;
-  padding: 6px 12px;
+  padding: 6px 15px;
   color: white;
 }
 
 textarea:focus{
   outline: none;
+}
+
+.displaysinglepost{
+  margin: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.like {
+  margin: 5px 0 5px 2px;
+}
+
+i:hover{
+  cursor: pointer;
 }
