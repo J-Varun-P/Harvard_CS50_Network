@@ -42,7 +42,7 @@ textarea:focus{
 
 .displaysinglepost{
   margin: 10px;
-  padding: 5px;
+  padding: 15px;
   border: 1px solid #ccc;
   border-radius: 10px;
 }
@@ -53,4 +53,27 @@ textarea:focus{
 
 i:hover{
   cursor: pointer;
+}
+
+.post_user{
+  position: relative;
+}
+
+.editpost{
+  position: absolute;
+  right: 5px;
+  top: 2px;
+}
+
+.editbutton{
+  background-color: #007bff;
+  border-color: #007bff;
+  border-radius: 5px;
+  padding: 2px 24px;
+  color: white;
+  opacity: 0.9;
+}
+
+.editbutton:hover{
+  opacity: 1;
 }

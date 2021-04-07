@@ -12,11 +12,19 @@
     <div class="displayposts">
       {% for post in postings %}
         <div class="displaysinglepost">
-          <h5>{{post.name.username}}</h5>
+          <div class="post_user">
+            <h5>{{post.name.username}}</h5>
+            {% if request.user.username == post.name.username %}
+            <div class="editpost">
+              <button type="button" class="editbutton">Edit</button>
+            </div>
+            {% endif %}
+          </div>
           <p>{{post.content}}</p>
           <p>{{ post.timestamp }}</p>
           <div class="like">
             <i class="far fa-thumbs-up" style="font-size: 21px;"></i>
+            <span>{{ post.likes }}</span>
           </div>
         </div>
       {% endfor %}
