@@ -6,7 +6,7 @@
     <div class="NewPost">
       <h4>New Post</h4>
       <form id="post_form">
-        {% csrf_token %}
+        <!--{% csrf_token %}-->
         <textarea name="name" rows="6" id="post_content"></textarea>
         <button type="submit">Post</button>
       </form>
@@ -54,13 +54,18 @@
 
         document.querySelector('#post_form').onsubmit = () =>{
           const content = document.querySelector('#post_content').value;
-
+          console.log(content)
           fetch('/addpost', {
             method: 'POST',
             body: JSON.stringify({
               content: content
             })
           })
+          .then(response => response.json())
+          .then(result => {
+            // Print result
+            console.log(result);
+          });
           return false;
         }
 

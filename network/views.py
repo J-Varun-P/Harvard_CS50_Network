@@ -1,8 +1,11 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Post
 
@@ -66,6 +69,7 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+@csrf_exempt
 def addpost(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -74,3 +78,4 @@ def addpost(request):
         print(user,content)
         post = Post(name=user, content=content)
         post.save()
+        return JsonResponse({"message": "Post added successfully."}, status=201)
