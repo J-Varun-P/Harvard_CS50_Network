@@ -75,11 +75,31 @@
             console.log(item.dataset.page);
             item.innerHTML = "This is a test";
             const editparent = item.parentElement.parentElement;
-            console.log(editparent)
-            console.log(editparent.children[2].innerHTML)
+            const content = editparent.children[2].innerHTML;
+            console.log(editparent);
+            console.log(editparent.children[2].innerHTML);
+            editparent.classList.remove('NewPost');
             editparent.innerHTML = `
-            <h3>Hello</h3>
+            <div class="editmecontent">
+            <h4>Edit Post</h4>
+            <div class="editpost">
+              <button id="savedittedpost" type="button" class="editbutton" data-page= {{ post.id }}>Save Edited Post</button>
+            </div>
+            </div>
+            <textarea rows="6" style="width: 100%; padding: 10px;" id="savedittedposttext"></textarea>
             `;
+
+            document.querySelector('#savedittedpost').onclick = () =>{
+              const content = document.querySelector('#savedittedposttext').value;
+              console.log(content);
+              fetch('/editpost', {
+                method: "POST",
+                body: JSON.stringify({body:content}),
+              })
+              .then(response => response.json())
+              .then(data => console.log(data));
+            }
+
           }
         });
 

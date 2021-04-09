@@ -1,4 +1,5 @@
 import json
+import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -90,3 +91,9 @@ def addpost(request):
     post = Post(name=user, content=content)
     post.save()
     return JsonResponse({"message": "Post added successfully."}, status=201)
+
+
+@csrf_exempt
+def editpost(request):
+    print('In editpost')
+    return JsonResponse({"message": "Test ok", "date": datetime.datetime.now().strftime("%b %d %Y, %I:%M %p")})
