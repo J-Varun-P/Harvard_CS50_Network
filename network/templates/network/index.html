@@ -110,7 +110,22 @@
                   console.log(data);
                   console.log(data.date);
                   console.log(username, content, likes, data.date);
-                  editparent.innerHTML = `Hello`;
+                  editparent.innerHTML = `
+                  
+                    <div class="editpost">
+                      <button type="button" class="editbutton" data-page=${id}>Edit</button>
+                    </div>
+                    <div class="post_user">
+                      <h5>${username}</h5>
+                    </div>
+                    <p>${content}</p>
+                    <p>${data.date}</p>
+                    <div class="like">
+                      <i class="far fa-thumbs-up" style="font-size: 21px;"></i>
+                      <span>${likes}</span>
+                    </div>
+
+                  `;
               });
             }
 
