@@ -97,7 +97,9 @@ def addpost(request):
 def editpost(request):
     data = json.loads(request.body)
     id = data.get("id", "")
+    body = data.get("body", "")
     post = Post.objects.get(pk=id)
     print(post.content)
     print('In editpost')
+    print(body)
     return JsonResponse({"message": "Test ok", "date": datetime.datetime.now().strftime("%b %d %Y, %I:%M %p")})

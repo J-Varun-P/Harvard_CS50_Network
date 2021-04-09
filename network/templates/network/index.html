@@ -76,7 +76,11 @@
             item.innerHTML = "This is a test";
             const editparent = item.parentElement.parentElement;
             const content = editparent.children[2].innerHTML;
+            const username = editparent.children[1].children[0].innerHTML;
+            const likes = editparent.children[4].children[1].innerHTML;
             console.log(editparent);
+            console.log(username);
+            console.log(likes);
             console.log(editparent.children[2].innerHTML);
             editparent.classList.remove('NewPost');
             editparent.innerHTML = `
@@ -102,7 +106,12 @@
                 }),
               })
               .then(response => response.json())
-              .then(data => console.log(data));
+              .then(data => {
+                  console.log(data);
+                  console.log(data.date);
+                  console.log(username, content, likes, data.date);
+                  editparent.innerHTML = `Hello`;
+              });
             }
 
           }
