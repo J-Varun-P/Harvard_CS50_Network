@@ -25,7 +25,11 @@
           <p>{{post.content}}</p>
           <p>{{ post.timestamp }}</p>
           <div class="like">
-            <i class="far fa-thumbs-up" style="font-size: 21px;"></i>
+            {% if post in liked_posts %}
+            <i class="fas fa-thumbs-up" style="font-size: 21px; color: blue;" data-page= {{ post.id }}></i>
+            {% else %}
+            <i class="far fa-thumbs-up" style="font-size: 21px;" data-page= {{ post.id }}></i>
+            {% endif %}
             <span>{{ post.likes }}</span>
           </div>
         </div>
@@ -58,12 +62,32 @@
             if(likedicon.style.color == 'blue'){
               console.log("i'm in blue");
               likedicon.style.color = '#212529';
+              const id = likedicon.dataset.page;
+              fetch('/unlikepost', {
+                method: "POST",
+                body: JSON.stringify({
+                  id: id,
+                })
+              })
+              .then(response => response.json())
+              .then(data => console.log(data));
+              console.log(`unlike id ${id}`);
               likedicon.classList.remove('fas');
               likedicon.classList.add('far');
             }
             else{
               console.log("i'm in none");
               likedicon.style.color = 'blue';
+              const id = likedicon.dataset.page;
+              fetch('/likepost', {
+                method: "POST",
+                body: JSON.stringify({
+                  id: id,
+                })
+              })
+              .then(response => response.json())
+              .then(data => console.log(data));
+              console.log(`like id ${id}`);
               likedicon.classList.remove('far');
               likedicon.classList.add('fas');
             }
@@ -92,6 +116,7 @@
             </div>
             <textarea rows="6" style="width: 100%; padding: 10px;" id="savedittedposttext"></textarea>
             `;
+            document.querySelector('#savedittedposttext').value = content;
 
             document.querySelector('#savedittedpost').onclick = () =>{
               const content = document.querySelector('#savedittedposttext').value;
@@ -111,7 +136,7 @@
                   console.log(data.date);
                   console.log(username, content, likes, data.date);
                   editparent.innerHTML = `
-                  
+
                     <div class="editpost">
                       <button type="button" class="editbutton" data-page=${id}>Edit</button>
                     </div>

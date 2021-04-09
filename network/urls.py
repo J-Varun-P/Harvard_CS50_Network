@@ -11,5 +11,7 @@ urlpatterns = [
 
     # API Routes
     path("addpost", views.addpost, name="addpost"),
-    path("editpost", views.editpost, name="editpost")
+    path("editpost", views.editpost, name="editpost"),
+    path("likepost", views.likepost, name="likepost"),
+    path("unlikepost", views.unlikepost, name="unlikepost"),
 ]

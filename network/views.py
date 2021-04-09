@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 from django.core import serializers
 
 
-from .models import User, Post
+from .models import User, Post, Like
 
 @csrf_exempt
 def index(request):
@@ -27,8 +27,16 @@ def index(request):
     #print(f"Next value {next}")
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    liked_posts = []
+    for page in page_obj:
+        a = Like.objects.filter(post=page)
+        if len(a) > 0:
+            liked_posts.append(page)
+    print('---------------')
+    print(liked_posts)
+    print('---------------')
     return render(request, "network/index.html", {
-    "page_obj": page_obj, "next": next, "previous": "false", "extra_space": len(paginator.page(1).object_list)
+    "page_obj": page_obj, "next": next, "previous": "false", "extra_space": len(paginator.page(1).object_list), "liked_posts": liked_posts
     })
 
 
@@ -99,7 +107,37 @@ def editpost(request):
     id = data.get("id", "")
     body = data.get("body", "")
     post = Post.objects.get(pk=id)
+    post.content = body
+    post.save()
     print(post.content)
     print('In editpost')
     print(body)
     return JsonResponse({"message": "Test ok", "date": datetime.datetime.now().strftime("%b %d %Y, %I:%M %p")})
+
+@csrf_exempt
+def likepost(request):
+    user = User.objects.get(pk=request.user.id)
+    data = json.loads(request.body)
+    id = data.get("id", "")
+    post = Post.objects.get(pk=id)
+    print(post,user)
+    likedpost = Like(name=user, post=post)
+    print(likedpost)
+    likedpost.save()
+    post.likes += 1
+    post.save()
+    return JsonResponse({"message": "Post liked successfully."}, status=201)
+
+@csrf_exempt
+def unlikepost(request):
+    user = User.objects.get(pk=request.user.id)
+    data = json.loads(request.body)
+    id = data.get("id", "")
+    post = Post.objects.get(pk=id)
+    print(post,user)
+    unlikedpost = Like.objects.get(post=post)
+    print(unlikedpost)
+    unlikedpost.delete()
+    post.likes -= 1
+    post.save()
+    return JsonResponse({"message": "Post unliked successfully."}, status=201)
