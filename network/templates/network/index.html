@@ -30,7 +30,7 @@
             {% else %}
             <i class="far fa-thumbs-up" style="font-size: 21px;" data-page= {{ post.id }}></i>
             {% endif %}
-            <span>{{ post.likes }}</span>
+            <span id="post_likes">{{ post.likes }}</span>
           </div>
         </div>
       {% endfor %}
@@ -74,6 +74,10 @@
               console.log(`unlike id ${id}`);
               likedicon.classList.remove('fas');
               likedicon.classList.add('far');
+              let a = parseInt(likedicon.parentElement.children[1].innerHTML);
+              a--;
+              console.log(`a value ${a}`);
+              likedicon.parentElement.children[1].innerHTML = a;
             }
             else{
               console.log("i'm in none");
@@ -90,6 +94,10 @@
               console.log(`like id ${id}`);
               likedicon.classList.remove('far');
               likedicon.classList.add('fas');
+              let a = parseInt(likedicon.parentElement.children[1].innerHTML);
+              a++;
+              console.log(`a value ${a}`);
+              likedicon.parentElement.children[1].innerHTML = a;
             }
           }
         });
