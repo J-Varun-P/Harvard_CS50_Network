@@ -26,7 +26,7 @@ h4{
   border-color: #bbb;
 }
 
-.NewPost button{
+.NewPost input[type="submit"], .step-links a{
   display: inline-block;
   margin-left: 5px;
   background-color: #007bff;
@@ -76,4 +76,20 @@ i:hover{
 
 .editbutton:hover{
   opacity: 1;
+}
+
+*:focus{
+  outline: none;
+}
+
+button:focus{
+  outline: none;
+}
+
+.step-links a{
+  letter-spacing: 0.1em;
+}
+
+.pagination{
+  margin-bottom: 10px;
 }

@@ -8,11 +8,11 @@
       <form id="post_form">
         <!--{% csrf_token %}-->
         <textarea name="name" rows="6" id="post_content"></textarea>
-        <button type="submit">Post</button>
+        <input type="submit" value="Post">
       </form>
     </div>
     <div class="displayposts">
-      {% for post in postings %}
+      {% for post in page_obj %}
         <div class="displaysinglepost">
           <div class="post_user">
             <h5>{{post.name.username}}</h5>
@@ -31,10 +31,28 @@
         </div>
       {% endfor %}
     </div>
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
 
     <script type="text/javascript">
 
       document.addEventListener('DOMContentLoaded', () => {
+
         document.querySelectorAll('.fa-thumbs-up').forEach(likedicon =>{
           likedicon.onclick = ()=> {
             if(likedicon.style.color == 'blue'){
@@ -56,16 +74,34 @@
           const content = document.querySelector('#post_content').value;
           console.log(content)
           fetch('/addpost', {
-            method: 'POST',
-            body: JSON.stringify({
-              content: content
-            })
+            method: "POST",
+            body: JSON.stringify({body:content}),
           })
           .then(response => response.json())
-          .then(result => {
-            // Print result
-            console.log(result);
-          });
+          .then(data => console.log(data));
+          let count = {{extra_space}};
+          if(count < 10){
+            const anewpost = `
+
+            <div class="displaysinglepost">
+              <div class="post_user">
+                <h5>{{post.name.username}}</h5>
+                {% if request.user.username == post.name.username %}
+                <div class="editpost">
+                  <button type="button" class="editbutton">Edit</button>
+                </div>
+                {% endif %}
+              </div>
+              <p>{{post.content}}</p>
+              <p>{{ post.timestamp }}</p>
+              <div class="like">
+                <i class="far fa-thumbs-up" style="font-size: 21px;"></i>
+                <span>{{ post.likes }}</span>
+              </div>
+            </div>
+
+            `;
+          }
           return false;
         }
 

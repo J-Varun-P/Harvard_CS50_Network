@@ -5,16 +5,29 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.core.paginator import Paginator
+from django.core import serializers
+
 
 from .models import User, Post
 
-
+@csrf_exempt
 def index(request):
     postings = Post.objects.all()
-    print(postings)
+    paginator = Paginator(postings, 10)
+    #print(p.page(1).has_next(), p.count)
+    #next = p.page(1).has_next()
+    #print(next)
+    #if p.page(1).has_next():
+    #    next = "true"
+    #else:
+    #    next = "false"
+    #print(f"Next value {next}")
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-    "postings": postings
+    "page_obj": page_obj, "next": next, "previous": "false", "extra_space": len(paginator.page(1).object_list)
     })
 
 
@@ -71,11 +84,9 @@ def register(request):
 
 @csrf_exempt
 def addpost(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        content = data.get("content", "")
-        user = User.objects.get(username=request.user.username)
-        print(user,content)
-        post = Post(name=user, content=content)
-        post.save()
-        return JsonResponse({"message": "Post added successfully."}, status=201)
+    data = json.loads(request.body)
+    content = data.get("body", "")
+    user = User.objects.get(username=request.user.username)
+    post = Post(name=user, content=content)
+    post.save()
+    return JsonResponse({"message": "Post added successfully."}, status=201)
