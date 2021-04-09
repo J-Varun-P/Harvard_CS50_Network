@@ -14,13 +14,13 @@
     <div class="displayposts">
       {% for post in page_obj %}
         <div class="displaysinglepost">
+          {% if request.user.username == post.name.username %}
+          <div class="editpost">
+            <button type="button" class="editbutton" data-page= {{ post.id }}>Edit</button>
+          </div>
+          {% endif %}
           <div class="post_user">
             <h5>{{post.name.username}}</h5>
-            {% if request.user.username == post.name.username %}
-            <div class="editpost">
-              <button type="button" class="editbutton">Edit</button>
-            </div>
-            {% endif %}
           </div>
           <p>{{post.content}}</p>
           <p>{{ post.timestamp }}</p>
@@ -39,7 +39,7 @@
         {% endif %}
 
         <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
         </span>
 
         {% if page_obj.has_next %}
@@ -68,7 +68,21 @@
               likedicon.classList.add('fas');
             }
           }
-        })
+        });
+
+        document.querySelectorAll('.editbutton').forEach(item => {
+          item.onclick = () =>{
+            console.log(item.dataset.page);
+            item.innerHTML = "This is a test";
+            const editparent = item.parentElement.parentElement;
+            console.log(editparent)
+            console.log(editparent.children[2].innerHTML)
+            editparent.innerHTML = `
+            <h3>Hello</h3>
+            `;
+          }
+        });
+
 
         document.querySelector('#post_form').onsubmit = () =>{
           const content = document.querySelector('#post_content').value;
@@ -79,6 +93,7 @@
           })
           .then(response => response.json())
           .then(data => console.log(data));
+          document.querySelector('#post_content').innerHTML = '';
           let count = {{extra_space}};
           if(count < 10){
             const anewpost = `

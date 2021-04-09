@@ -14,7 +14,7 @@ from .models import User, Post
 
 @csrf_exempt
 def index(request):
-    postings = Post.objects.all()
+    postings = Post.objects.all().order_by('-timestamp')
     paginator = Paginator(postings, 10)
     #print(p.page(1).has_next(), p.count)
     #next = p.page(1).has_next()

@@ -55,14 +55,14 @@ i:hover{
   cursor: pointer;
 }
 
-.post_user{
+.displaysinglepost{
   position: relative;
 }
 
 .editpost{
   position: absolute;
   right: 5px;
-  top: 2px;
+  top: 12px;
 }
 
 .editbutton{
