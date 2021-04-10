@@ -192,3 +192,18 @@ def unfollow(request):
         if user.following.id == id:
             user.delete()
     return JsonResponse({"message": "UnFollwed User"}, status=201)
+
+
+def following(request):
+    posts = Post.objects.all().order_by('-timestamp')
+    a = []
+    b = []
+    following = Follow.objects.filter(name=request.user).all()
+    for f in following:
+        b.append(f.following)
+    for post in posts:
+        if post.name in b:
+            a.append(post)
+    return render(request, "network/following.html", {
+    "posts": a
+    })

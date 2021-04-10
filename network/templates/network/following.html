@@ -1,0 +1,80 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<div class="displayposts">
+  {% for post in posts %}
+    <div class="displaysinglepost">
+      {% if request.user.username == post.name.username %}
+      <div class="editpost">
+        <button type="button" class="editbutton" data-page= {{ post.id }}>Edit</button>
+      </div>
+      {% endif %}
+      <div class="post_user">
+        <a class="post_user_username" href="{% url 'users' post.name.username %}" data-user= {{ post.name.id }}><h5>{{post.name.username}}</h5></a>
+      </div>
+      <p>{{post.content}}</p>
+      <p>{{ post.timestamp }}</p>
+      <div class="like">
+        {% if post in liked_posts %}
+        <i class="fas fa-thumbs-up" style="font-size: 21px; color: blue;" data-page= {{ post.id }}></i>
+        {% else %}
+        <i class="far fa-thumbs-up" style="font-size: 21px;" data-page= {{ post.id }}></i>
+        {% endif %}
+        <span id="post_likes">{{ post.likes }}</span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.querySelectorAll('.fa-thumbs-up').forEach(likedicon =>{
+        likedicon.onclick = ()=> {
+          if(likedicon.style.color == 'blue'){
+            console.log("i'm in blue");
+            likedicon.style.color = '#212529';
+            const id = likedicon.dataset.page;
+            fetch('/unlikepost', {
+              method: "POST",
+              body: JSON.stringify({
+                id: id,
+              })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data));
+            console.log(`unlike id ${id}`);
+            likedicon.classList.remove('fas');
+            likedicon.classList.add('far');
+            let a = parseInt(likedicon.parentElement.children[1].innerHTML);
+            a--;
+            console.log(`a value ${a}`);
+            likedicon.parentElement.children[1].innerHTML = a;
+          }
+          else{
+            console.log("i'm in none");
+            likedicon.style.color = 'blue';
+            const id = likedicon.dataset.page;
+            fetch('/likepost', {
+              method: "POST",
+              body: JSON.stringify({
+                id: id,
+              })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data));
+            console.log(`like id ${id}`);
+            likedicon.classList.remove('far');
+            likedicon.classList.add('fas');
+            let a = parseInt(likedicon.parentElement.children[1].innerHTML);
+            a++;
+            console.log(`a value ${a}`);
+            likedicon.parentElement.children[1].innerHTML = a;
+          }
+        }
+      });
+    })
+</script>
+
+{% endif %}
+{% endblock %}
