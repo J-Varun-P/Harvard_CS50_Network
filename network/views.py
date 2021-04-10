@@ -196,14 +196,25 @@ def unfollow(request):
 
 def following(request):
     posts = Post.objects.all().order_by('-timestamp')
-    a = []
-    b = []
+    a1 = []
+    b1 = []
     following = Follow.objects.filter(name=request.user).all()
     for f in following:
-        b.append(f.following)
+        b1.append(f.following)
     for post in posts:
-        if post.name in b:
-            a.append(post)
+        if post.name in b1:
+            a1.append(post)
+    paginator = Paginator(a1, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    liked_posts = []
+    for page in page_obj:
+        a = Like.objects.filter(post=page)
+        print(a)
+        if len(a) > 0:
+            for x in a:
+                if x.name.username == request.user.username:
+                    liked_posts.append(x.post)
     return render(request, "network/following.html", {
-    "posts": a
+    "page_obj": page_obj, "liked_posts": liked_posts, "next": next, "previous": "false"
     })
