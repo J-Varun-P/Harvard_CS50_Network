@@ -142,9 +142,11 @@ def unlikepost(request):
     id = data.get("id", "")
     post = Post.objects.get(pk=id)
     print(post,user)
-    unlikedpost = Like.objects.get(post=post)
+    unlikedpost = Like.objects.filter(post=post).all()
+    for post_a in unlikedpost:
+        if post_a.name.username == request.user.username:
+            post_a.delete()
     print(unlikedpost)
-    unlikedpost.delete()
     post.likes -= 1
     post.save()
     return JsonResponse({"message": "Post unliked successfully."}, status=201)
