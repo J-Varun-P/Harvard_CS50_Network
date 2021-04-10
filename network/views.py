@@ -154,7 +154,15 @@ def unlikepost(request):
 def users(request, name):
     user = User.objects.get(username=name)
     posts = Post.objects.filter(name=user).all().order_by('-timestamp')
+    liked_posts = []
+    for post in posts:
+        a = Like.objects.filter(post=post)
+        print(a)
+        if len(a) > 0:
+            for x in a:
+                if x.name.username == request.user.username:
+                    liked_posts.append(x.post)
     return render(request, "network/profile.html", {
-    "user": user, "posts": posts
+    "user": user, "posts": posts, "liked_posts": liked_posts
     })
     return HttpResponse(f"Hello {name}")

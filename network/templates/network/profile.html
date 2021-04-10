@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>User</title>
+
     <style media="screen">
       html,body{
         padding: 0;
@@ -35,7 +36,26 @@
         border-radius: 10px;
         line-height: 2;
       }
+      button{
+        padding: 10px;
+        color: white;
+        background: #007bff;
+        border-color: #007bff;
+        border-radius: 10px;
+        font-size: 16px;
+        letter-spacing: 0.1em;
+      }
+      button:focus{
+        outline: none;
+      }
+      .buttons{
+        padding: 10px 10px 10px 20px;
+      }
+      .posts>*{
+        margin: 4px;
+      }
     </style>
+    <script src="https://kit.fontawesome.com/f13c656753.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <div class="links">
@@ -46,6 +66,12 @@
       <h3>Followers</h3>
       <h3>Following</h3>
     </div>
+    {% if user != request.user %}
+    <div class="buttons">
+      <button type="button">Follow</button>
+      <button type="button">UnFollow</button>
+    </div>
+    {% endif %}
     {% for post in posts %}
       <div class="posts">
         <div class="posts_content">
@@ -54,7 +80,25 @@
         <div class="posts_time">
             <i style="font-size:14px; color:#999;">{{ post.timestamp }}</i>
         </div>
+        <div class="likes">
+          <div class="like">
+            {% if post in liked_posts %}
+            <i class="fas fa-thumbs-up" style="font-size: 21px; color: blue;" data-page= {{ post.id }}></i>
+            {% else %}
+            <i class="far fa-thumbs-up" style="font-size: 21px;" data-page= {{ post.id }}></i>
+            {% endif %}
+            <span id="post_likes">{{ post.likes }}</span>
+          </div>
+        </div>
       </div>
     {% endfor %}
+
+    <script type="text/javascript">
+
+      document.addEventListener('DOMContentLoaded', ()=>{
+
+      });
+      
+    </script>
   </body>
 </html>
