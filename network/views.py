@@ -30,8 +30,15 @@ def index(request):
     liked_posts = []
     for page in page_obj:
         a = Like.objects.filter(post=page)
+        print(a)
         if len(a) > 0:
-            liked_posts.append(page)
+            for x in a:
+                if x.name.username == request.user.username:
+                    liked_posts.append(x.post)
+        #print(a)
+        #if len(a) > 0:
+        #print(a.post)
+        #liked_posts.append(page)
     print('---------------')
     print(liked_posts)
     print('---------------')
