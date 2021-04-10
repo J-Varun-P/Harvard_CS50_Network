@@ -155,6 +155,8 @@ def users(request, name):
     user = User.objects.get(username=name)
     posts = Post.objects.filter(name=user).all().order_by('-timestamp')
     follows = Follow.objects.filter(name=request.user).all()
+    following_count = len(Follow.objects.filter(name=user).all())
+    followers_count = len(Follow.objects.filter(following=user).all())
     is_following = "false"
     for follow in follows:
         if follow.following == user:
@@ -168,7 +170,7 @@ def users(request, name):
                 if x.name.username == request.user.username:
                     liked_posts.append(x.post)
     return render(request, "network/profile.html", {
-    "user": user, "posts": posts, "liked_posts": liked_posts, "is_following": is_following
+    "user": user, "posts": posts, "liked_posts": liked_posts, "is_following": is_following, "following_count": following_count, "followers_count": followers_count
     })
     return HttpResponse(f"Hello {name}")
 

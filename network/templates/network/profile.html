@@ -66,8 +66,8 @@
     </div>
     <div class="user">
       <h3>{{user.username}}</h3>
-      <h3>Followers</h3>
-      <h3>Following</h3>
+      <h3>Followers ({{ followers_count }})</h3>
+      <h3>Following ({{ following_count }})</h3>
     </div>
     {% if user != request.user %}
     <div class="buttons">
@@ -107,11 +107,12 @@
           document.querySelector('#follow').style.display = 'none';
           document.querySelector('#unfollow').style.display = 'inline-block';
         }
-        else{
+        else if( "{{user}}" != "{{request.user}}" ){
           document.querySelector('#unfollow').style.display = 'none';
           document.querySelector('#follow').style.display = 'inline-block';
         }
 
+        if(document.querySelector('#follow') != null){
         document.querySelector('#follow').onclick = ()=>{
           document.querySelector('#follow').style.display = 'none';
           document.querySelector('#unfollow').style.display = 'inline-block';
@@ -125,7 +126,8 @@
           .then(response => response.json())
           .then(data => console.log(data));
         }
-
+      }
+        if(document.querySelector('#unfollow') != null){
         document.querySelector('#unfollow').onclick = ()=>{
           document.querySelector('#unfollow').style.display = 'none';
           document.querySelector('#follow').style.display = 'inline-block';
@@ -139,6 +141,7 @@
           .then(response => response.json())
           .then(data => console.log(data));
         }
+      }
 
         document.querySelectorAll('.fa-thumbs-up').forEach(likedicon =>{
           likedicon.onclick = ()=> {
