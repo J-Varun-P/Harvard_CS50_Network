@@ -20,7 +20,7 @@
           </div>
           {% endif %}
           <div class="post_user">
-            <h5>{{post.name.username}}</h5>
+            <a class="post_user_username" href="{% url 'users' post.name.username %}" data-user= {{ post.name.id }}><h5>{{post.name.username}}</h5></a>
           </div>
           <p>{{post.content}}</p>
           <p>{{ post.timestamp }}</p>
@@ -56,6 +56,13 @@
     <script type="text/javascript">
 
       document.addEventListener('DOMContentLoaded', () => {
+
+        document.querySelectorAll('.post_user_username').forEach(user => {
+          user.onclick = () => {
+            console.log(`The id is ${user.dataset.user}`);
+          }
+        });
+
 
         document.querySelectorAll('.fa-thumbs-up').forEach(likedicon =>{
           likedicon.onclick = ()=> {

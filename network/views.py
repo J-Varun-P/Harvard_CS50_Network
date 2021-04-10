@@ -150,3 +150,11 @@ def unlikepost(request):
     post.likes -= 1
     post.save()
     return JsonResponse({"message": "Post unliked successfully."}, status=201)
+
+def users(request, name):
+    user = User.objects.get(username=name)
+    posts = Post.objects.filter(name=user).all().order_by('-timestamp')
+    return render(request, "network/profile.html", {
+    "user": user, "posts": posts
+    })
+    return HttpResponse(f"Hello {name}")

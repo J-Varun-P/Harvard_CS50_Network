@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>User</title>
+    <style media="screen">
+      html,body{
+        padding: 0;
+        margin: 0;
+        font-family: sans-serif;
+        color: #007bff;
+        letter-spacing: 0.1em;
+      }
+      .links{
+        padding: 20px;
+        font-size: 21px;
+        background: #ddd;
+      }
+      a{
+        text-decoration: none;
+      }
+      .user{
+        display: flex;
+        padding: 10px 10px 10px 20px;
+        background: #eee;
+      }
+      .user >*{
+        flex: 1;
+      }
+      .posts{
+        margin: 10px;
+        padding: 20px;
+        color: #333;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        line-height: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="links">
+      <a href="{% url "index" %}">Network</a>
+    </div>
+    <div class="user">
+      <h3>{{user.username}}</h3>
+      <h3>Followers</h3>
+      <h3>Following</h3>
+    </div>
+    {% for post in posts %}
+      <div class="posts">
+        <div class="posts_content">
+            {{post.content}}
+        </div>
+        <div class="posts_time">
+            <i style="font-size:14px; color:#999;">{{ post.timestamp }}</i>
+        </div>
+      </div>
+    {% endfor %}
+  </body>
+</html>

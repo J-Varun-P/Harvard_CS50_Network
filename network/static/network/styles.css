@@ -93,3 +93,7 @@ button:focus{
 .pagination{
   margin-bottom: 10px;
 }
+
+.post_user h5{
+  display: inline-block;
+}
