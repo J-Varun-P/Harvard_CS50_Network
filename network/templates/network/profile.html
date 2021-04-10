@@ -54,6 +54,9 @@
       .posts>*{
         margin: 4px;
       }
+      .fa-thumbs-up:hover{
+        cursor: pointer;
+      }
     </style>
     <script src="https://kit.fontawesome.com/f13c656753.js" crossorigin="anonymous"></script>
   </head>
@@ -68,8 +71,8 @@
     </div>
     {% if user != request.user %}
     <div class="buttons">
-      <button type="button">Follow</button>
-      <button type="button">UnFollow</button>
+        <button type="button" id="follow">Follow</button>
+        <button type="button" id="unfollow">UnFollow</button>
     </div>
     {% endif %}
     {% for post in posts %}
@@ -97,8 +100,94 @@
 
       document.addEventListener('DOMContentLoaded', ()=>{
 
+        let show = "{{ is_following }}";
+
+        if(show == "true")
+        {
+          document.querySelector('#follow').style.display = 'none';
+          document.querySelector('#unfollow').style.display = 'inline-block';
+        }
+        else{
+          document.querySelector('#unfollow').style.display = 'none';
+          document.querySelector('#follow').style.display = 'inline-block';
+        }
+
+        document.querySelector('#follow').onclick = ()=>{
+          document.querySelector('#follow').style.display = 'none';
+          document.querySelector('#unfollow').style.display = 'inline-block';
+          let id = {{ user.id }};
+          fetch('/follow', {
+            method: "POST",
+            body: JSON.stringify({
+              id: id,
+            })
+          })
+          .then(response => response.json())
+          .then(data => console.log(data));
+        }
+
+        document.querySelector('#unfollow').onclick = ()=>{
+          document.querySelector('#unfollow').style.display = 'none';
+          document.querySelector('#follow').style.display = 'inline-block';
+          let id = {{ user.id }};
+          fetch('/unfollow', {
+            method: "POST",
+            body: JSON.stringify({
+              id: id,
+            })
+          })
+          .then(response => response.json())
+          .then(data => console.log(data));
+        }
+
+        document.querySelectorAll('.fa-thumbs-up').forEach(likedicon =>{
+          likedicon.onclick = ()=> {
+            if(likedicon.style.color == 'blue'){
+              console.log("i'm in blue");
+              likedicon.style.color = '#212529';
+              const id = likedicon.dataset.page;
+              fetch('/unlikepost', {
+                method: "POST",
+                body: JSON.stringify({
+                  id: id,
+                })
+              })
+              .then(response => response.json())
+              .then(data => console.log(data));
+              console.log(`unlike id ${id}`);
+              likedicon.classList.remove('fas');
+              likedicon.classList.add('far');
+              let a = parseInt(likedicon.parentElement.children[1].innerHTML);
+              a--;
+              console.log(`a value ${a}`);
+              likedicon.parentElement.children[1].innerHTML = a;
+            }
+            else{
+              console.log("i'm in none");
+              likedicon.style.color = 'blue';
+              const id = likedicon.dataset.page;
+              fetch('/likepost', {
+                method: "POST",
+                body: JSON.stringify({
+                  id: id,
+                })
+              })
+              .then(response => response.json())
+              .then(data => console.log(data));
+              console.log(`like id ${id}`);
+              likedicon.classList.remove('far');
+              likedicon.classList.add('fas');
+              let a = parseInt(likedicon.parentElement.children[1].innerHTML);
+              a++;
+              console.log(`a value ${a}`);
+              likedicon.parentElement.children[1].innerHTML = a;
+            }
+          }
+        });
+
+
       });
-      
+
     </script>
   </body>
 </html>

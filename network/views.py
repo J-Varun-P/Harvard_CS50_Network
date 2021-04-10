@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 from django.core import serializers
 
 
-from .models import User, Post, Like
+from .models import User, Post, Like, Follow
 
 @csrf_exempt
 def index(request):
@@ -154,6 +154,11 @@ def unlikepost(request):
 def users(request, name):
     user = User.objects.get(username=name)
     posts = Post.objects.filter(name=user).all().order_by('-timestamp')
+    follows = Follow.objects.filter(name=request.user).all()
+    is_following = "false"
+    for follow in follows:
+        if follow.following == user:
+            is_following = "true"
     liked_posts = []
     for post in posts:
         a = Like.objects.filter(post=post)
@@ -163,6 +168,25 @@ def users(request, name):
                 if x.name.username == request.user.username:
                     liked_posts.append(x.post)
     return render(request, "network/profile.html", {
-    "user": user, "posts": posts, "liked_posts": liked_posts
+    "user": user, "posts": posts, "liked_posts": liked_posts, "is_following": is_following
     })
     return HttpResponse(f"Hello {name}")
+
+@csrf_exempt
+def follow(request):
+    data = json.loads(request.body)
+    id = data.get("id", "")
+    user = User.objects.get(pk=id)
+    follow = Follow(name=request.user, following=user)
+    follow.save()
+    return JsonResponse({"message": "Follwed User"}, status=201)
+
+@csrf_exempt
+def unfollow(request):
+    data = json.loads(request.body)
+    id = data.get("id", "")
+    users = Follow.objects.filter(name=request.user).all()
+    for user in users:
+        if user.following.id == id:
+            user.delete()
+    return JsonResponse({"message": "UnFollwed User"}, status=201)
