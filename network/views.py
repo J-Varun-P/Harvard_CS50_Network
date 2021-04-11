@@ -1,6 +1,7 @@
 import json
 import datetime
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
@@ -151,6 +152,7 @@ def unlikepost(request):
     post.save()
     return JsonResponse({"message": "Post unliked successfully."}, status=201)
 
+@login_required
 def users(request, name):
     user = User.objects.get(username=name)
     posts = Post.objects.filter(name=user).all().order_by('-timestamp')
@@ -193,7 +195,7 @@ def unfollow(request):
             user.delete()
     return JsonResponse({"message": "UnFollwed User"}, status=201)
 
-
+@login_required
 def following(request):
     posts = Post.objects.all().order_by('-timestamp')
     a1 = []
