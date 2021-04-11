@@ -112,20 +112,13 @@
         document.querySelectorAll('.editbutton').forEach(item => {
           item.onclick = () =>{
             console.log(item.dataset.page);
-            item.innerHTML = "This is a test";
             const editparent = item.parentElement.parentElement;
-            const content = editparent.children[2].innerHTML;
-            const username = editparent.children[1].children[0].innerHTML;
-            const likes = editparent.children[4].children[1].innerHTML;
-            const liked_content = editparent.children[4];
-            const timestamp = editparent.children[3].innerHTML;
-            console.log("in edit");
-            console.log(editparent);
-            console.log(liked_content);
-            console.log(username);
-            console.log(likes);
-            console.log(editparent.children[2].innerHTML);
-            editparent.classList.remove('NewPost');
+            const e1 = editparent.children[0];
+            const e2 = editparent.children[1];
+            const e3 = editparent.children[2];
+            const e4 = editparent.children[3];
+            const e5 = editparent.children[4];
+            const content = e3.innerHTML;
             editparent.innerHTML = `
             <div class="editmecontent">
             <h4>Edit Post</h4>
@@ -153,24 +146,14 @@
               .then(data => {
                   console.log(data);
                   console.log(data.date);
-                  console.log(username, content, likes, data.date);
-                  editparent.innerHTML = `
-
-                    <div class="editpost">
-                      <button type="button" class="editbutton" data-page=${id}>Edit</button>
-                    </div>
-                    <div class="post_user">
-                      <h5>${username}</h5>
-                    </div>
-                    <p>${content}</p>
-                    <p>${data.date}</p>
-                    <div class="like">
-                      <i class="far fa-thumbs-up" style="font-size: 21px;"></i>
-                      <span>${likes}</span>
-                    </div>
-
-                  `;
-
+                  e3.innerHTML = content;
+                  e4.innerHTML = data.date;
+                  editparent.innerHTML = ``;
+                  editparent.appendChild(e1);
+                  editparent.appendChild(e2);
+                  editparent.appendChild(e3);
+                  editparent.appendChild(e4);
+                  editparent.appendChild(e5);
               });
             }
 
@@ -190,31 +173,6 @@
 
           }
           window.location.replace("http://127.0.0.1:8000/");
-          /*
-          document.querySelector('#post_content').value = '';
-          let count = {{extra_space}};
-          if(count < 10){
-            const anewpost = `
-
-            <div class="displaysinglepost">
-              <div class="post_user">
-                <h5>{{post.name.username}}</h5>
-                {% if request.user.username == post.name.username %}
-                <div class="editpost">
-                  <button type="button" class="editbutton">Edit</button>
-                </div>
-                {% endif %}
-              </div>
-              <p>{{post.content}}</p>
-              <p>{{ post.timestamp }}</p>
-              <div class="like">
-                <i class="far fa-thumbs-up" style="font-size: 21px;"></i>
-                <span>{{ post.likes }}</span>
-              </div>
-            </div>
-
-            `;
-          }*/
           return false;
         }
 
